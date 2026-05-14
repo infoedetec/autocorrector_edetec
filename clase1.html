@@ -796,7 +796,11 @@ document.getElementById('solution-overlay').addEventListener('click',function(e)
   if(e.target===this){clearInterval(timerInterval);this.classList.remove('open');}
 });
 
-// INIT
+// INIT — arrancar en el ejercicio indicado por el home (?start=N)
+const _startParam = new URLSearchParams(window.location.search).get('start');
+currentIdx = (_startParam !== null && !isNaN(_startParam))
+  ? Math.min(parseInt(_startParam), EJERCICIOS.length - 1)
+  : 0;
 render();
 
 // ═══════════════════════════════════════════════════
@@ -805,22 +809,23 @@ render();
 function registrarEjercicio(ej) {
   if (!SESION) return;
 
-  // Construir tabla de coordenadas como resumen
+  // ID corto para el home (ej: "c1e2")
+  const ejId = ejercicioToId(ej.titulo);
+
+  // Tabla de coordenadas como resumen para el email
   const filas = ej.puntos.map(p => {
     const x = document.getElementById(`inp-${p}-x`)?.value || '—';
     const z = document.getElementById(`inp-${p}-z`)?.value || '—';
     return `  ${p.padEnd(4)} | X: ${String(x).padStart(6)} | Z: ${String(z).padStart(6)}`;
   });
-  const resumen = 'Tabla de coordenadas:\n' + filas.join('\n');
-
-  // ID del ejercicio para el progreso (ej: "c1e2")
-  const ejId = ejercicioToId(ej.titulo);
+  const resumen = ej.titulo + '\nTabla de coordenadas:\n' + filas.join('\n');
 
   const params = new URLSearchParams({
     action:    'registrarProgreso',
     email:     SESION.email,
     nombre:    SESION.nombre,
-    ejercicio: ej.titulo,
+    ejercicio: ejId,          // clave corta: c1e2, c1e5, etc.
+    ejTitulo:  ej.titulo,     // título legible para el email
     estado:    'done',
     resumen:   resumen
   });
@@ -829,14 +834,15 @@ function registrarEjercicio(ej) {
     .then(r => r.json())
     .then(res => {
       if (!res.ok) console.warn('registrarProgreso:', res.error);
-      // Guardar también en localStorage para el home
       actualizarProgresoLocal(ejId);
     })
-    .catch(err => console.warn('registrarProgreso error:', err));
+    .catch(err => {
+      console.warn('registrarProgreso error:', err);
+      actualizarProgresoLocal(ejId); // guardar local aunque falle el server
+    });
 }
 
 function ejercicioToId(titulo) {
-  // "Ejercicio 2 — ..." → "c1e2", etc.
   const match = titulo.match(/Ejercicio\s+(\d+)/i);
   if (match) return 'c1e' + match[1];
   return 'c1e_' + titulo.replace(/[^a-z0-9]/gi,'').toLowerCase().slice(0,6);
@@ -849,7 +855,7 @@ function actualizarProgresoLocal(ejId) {
   try { prog = JSON.parse(localStorage.getItem(key) || '{}'); } catch(e) {}
   prog[ejId] = 'done';
   const hoy = new Date().toLocaleDateString('es-AR', {day:'2-digit',month:'2-digit'});
-  prog[ejId + '_fecha'] = hoy;
+  prog[ejId + '_date'] = hoy;  // _date para que coincida con el home
   localStorage.setItem(key, JSON.stringify(prog));
 }
 </script>
