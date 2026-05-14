@@ -291,18 +291,20 @@ function showErr(m){
 // Carga progreso del servidor y entra al home
 function cargarProgresoYEntrar(userData) {
   const em = userData.email;
+  const localProg = JSON.parse(localStorage.getItem('edetec_' + em) || '{}');
+
   fetch(SCRIPT_URL + '?action=getProgreso&email=' + encodeURIComponent(em))
     .then(r => r.json())
     .then(res => {
-      prog = (res.ok && res.progreso) ? res.progreso : {};
-      // Respaldo en localStorage por si hay problemas de conexión
+      const serverProg = (res.ok && res.progreso && Object.keys(res.progreso).length > 0)
+        ? res.progreso : null;
+      // Server gana sobre local, pero si server está vacío conservamos local
+      prog = serverProg ? Object.assign({}, localProg, serverProg) : localProg;
       localStorage.setItem('edetec_' + em, JSON.stringify(prog));
       loginOk(userData);
     })
     .catch(() => {
-      // Si falla la red, usar localStorage como respaldo
-      const saved = localStorage.getItem('edetec_' + em);
-      prog = saved ? JSON.parse(saved) : {};
+      prog = localProg;
       loginOk(userData);
     });
 }
