@@ -408,6 +408,12 @@ function renderHome(){
 }
 
 function goCls(i, mode='next'){
+  // Clases sin contenido todavía → mostrar modal
+  if (CURSO[i].num > 1) {
+    const m = document.getElementById('modal-prox');
+    m.style.display = 'flex';
+    return;
+  }
   localStorage.setItem('edetec_'+user.email,JSON.stringify(prog));
   const cl = CURSO[i];
   let start;
@@ -467,5 +473,17 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 </script>
+
+<div id="modal-prox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;align-items:center;justify-content:center;padding:20px">
+  <div style="background:#1a1a2e;border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:32px 28px;max-width:320px;width:100%;text-align:center">
+    <div style="font-size:36px;margin-bottom:12px">🚧</div>
+    <h3 style="color:#fff;margin:0 0 10px;font-size:18px">Clase 2 — Próximamente</h3>
+    <p style="color:#aaa;font-size:14px;line-height:1.6;margin:0 0 24px">Estamos preparando el contenido. ¡Muy pronto disponible!</p>
+    <button onclick="document.getElementById('modal-prox').style.display='none'"
+      style="background:#4f8ef7;color:#fff;border:none;border-radius:10px;padding:12px 28px;font-size:15px;font-weight:600;cursor:pointer;width:100%">
+      Entendido
+    </button>
+  </div>
+</div>
 </body>
 </html>
