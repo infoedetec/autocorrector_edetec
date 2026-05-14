@@ -520,8 +520,8 @@ function render() {
               ${ej.puntos.map(p=>`
               <tr>
                 <td class="td-punto">${p}</td>
-                <td class="td-input" id="cell-${p}-x"><input type="text" inputmode="numeric" id="inp-${p}-x" placeholder="—"></td>
-                <td class="td-input" id="cell-${p}-z"><input type="text" inputmode="numeric" id="inp-${p}-z" placeholder="—"></td>
+                <td class="td-input" id="cell-${p}-x"><input type="text" inputmode="numeric" id="inp-${p}-x" placeholder="—" autocomplete="off"></td>
+                <td class="td-input" id="cell-${p}-z"><input type="text" inputmode="numeric" id="inp-${p}-z" placeholder="—" autocomplete="off"></td>
                 <td class="td-status" id="status-${p}"></td>
               </tr>`).join('')}
             </tbody>
@@ -604,9 +604,8 @@ function onInput() {
 function verificar() {
   const ej = EJERCICIOS[currentIdx];
   intentos++;
-  const badge = document.getElementById('intento-badge');
-  badge.style.display = 'inline-block';
-  badge.textContent = `Intento ${intentos}`;
+  // intentos se sigue contando internamente (se envía al profe, oculto al alumno)
+  // badge no se muestra
 
   // Reset warns
   document.getElementById('warn-list').innerHTML = '';
@@ -652,7 +651,7 @@ function verificar() {
 
   // Botón solución: solo si hay errores y todo completado
   const btnSol = document.getElementById('btn-solucion');
-  btnSol.style.display = (errores.length>0 && allFilled) ? 'inline-flex' : 'none';
+  btnSol.style.display = (errores.length>0 && allFilled && currentIdx === 0) ? 'inline-flex' : 'none';
 
   // Botón siguiente: solo si aprobado (sin errores, puede tener advertencias)
   const btnNext = document.getElementById('btn-next');
@@ -824,10 +823,10 @@ function registrarEjercicio(ej) {
     action:    'registrarProgreso',
     email:     SESION.email,
     nombre:    SESION.nombre,
-    ejercicio: ejId,          // clave corta: c1e2, c1e5, etc.
-    ejTitulo:  ej.titulo,     // título legible para el email
+    ejercicio: ejId,
+    ejTitulo:  ej.titulo,
     estado:    'done',
-    resumen:   resumen
+    resumen:   resumen + '\n\nIntentos: ' + intentos
   });
 
   fetch(SCRIPT_URL + '?' + params.toString())
