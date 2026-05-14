@@ -248,11 +248,12 @@ function doLogin(){
   document.getElementById('login-err').classList.remove('show');
   document.getElementById('loading-overlay').classList.add('show');
 
+  const cel6 = cel.slice(-6);
   const url = SCRIPT_URL
     + '?action=verificarAcceso'
     + '&apellido=' + encodeURIComponent(ap)
     + '&email='    + encodeURIComponent(em)
-    + '&cel8='     + encodeURIComponent(cel8);
+    + '&cel6='     + encodeURIComponent(cel6);
 
   fetch(url)
     .then(r => r.json())
@@ -289,7 +290,7 @@ function showErr(m){
 
 // Carga progreso del servidor y entra al home
 function cargarProgresoYEntrar(userData) {
-  const em = userData.email || userData.first;
+  const em = userData.email;
   fetch(SCRIPT_URL + '?action=getProgreso&email=' + encodeURIComponent(em))
     .then(r => r.json())
     .then(res => {
@@ -402,13 +403,25 @@ window.addEventListener('DOMContentLoaded', () => {
     try {
       const u = JSON.parse(saved);
       if (u && u.email) {
-        // Restaurar progreso desde localStorage y mostrar home
-        const progSaved = localStorage.getItem('edetec_' + u.email);
-        prog = progSaved ? JSON.parse(progSaved) : {};
         user = u;
+        // Mostrar home de inmediato con progreso local
+        const progLocal = localStorage.getItem('edetec_' + u.email);
+        prog = progLocal ? JSON.parse(progLocal) : {};
         document.getElementById('login-screen').classList.add('hidden');
         document.getElementById('home-screen').classList.add('show');
         renderHome();
+        // Sincronizar con Sheet en segundo plano
+        fetch(SCRIPT_URL + '?action=getProgreso&email=' + encodeURIComponent(u.email))
+          .then(r => r.json())
+          .then(res => {
+            if (res.ok && res.progreso && Object.keys(res.progreso).length > 0) {
+              // Mergear: Sheet gana sobre localStorage (es la fuente de verdad)
+              prog = Object.assign({}, prog, res.progreso);
+              localStorage.setItem('edetec_' + u.email, JSON.stringify(prog));
+              renderHome(); // re-renderizar con datos frescos
+            }
+          })
+          .catch(() => {}); // si falla la red, quedamos con localStorage
         return;
       }
     } catch(e) {}
