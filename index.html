@@ -386,7 +386,13 @@ function renderHome(){
     });
     let actH='';
     if(isCurr) actH=`<div class="card-bot"><button class="btn-go" onclick="goCls(${i})">→ Ir a Clase ${cl.num}</button></div>`;
-    else if(allOk) actH=`<div class="card-bot"><button class="btn-rep" onclick="goCls(${i})">↩ Repasar</button></div>`;
+    else if(allOk){
+      const adicPend=cl.adicionales.some(e=>prog[e.id]!=='done');
+      actH=`<div class="card-bot" style="gap:8px">
+        <button class="btn-rep" onclick="goCls(${i},'repasar')">↩ Repasar</button>
+        ${adicPend&&cl.adicionales.length?`<button class="btn-go" style="flex:1" onclick="goCls(${i},'adicionales')">+ Adicionales</button>`:''}
+      </div>`;
+    }
     const card=document.createElement('div');
     card.className='card'+(isLocked?' locked':isCurr?' curr can':' can');
     card.innerHTML=`<div class="card-top">
@@ -401,12 +407,18 @@ function renderHome(){
   });
 }
 
-function goCls(i){
+function goCls(i, mode='next'){
   localStorage.setItem('edetec_'+user.email,JSON.stringify(prog));
   const cl = CURSO[i];
-  // Primer ejercicio básico no completado
-  const nextIdx = cl.basicos.findIndex(e => prog[e.id] !== 'done');
-  const start = nextIdx >= 0 ? nextIdx : 0;
+  let start;
+  if (mode === 'repasar') {
+    start = 0;
+  } else if (mode === 'adicionales') {
+    start = cl.basicos.length; // primer adicional
+  } else {
+    const nextIdx = cl.basicos.findIndex(e => prog[e.id] !== 'done');
+    start = nextIdx >= 0 ? nextIdx : 0;
+  }
   window.location.href = CURSO[i].file + '?start=' + start;
 }
 
