@@ -124,6 +124,24 @@ body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--tex
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 .loading-txt { color: var(--text2); font-size: 15px; letter-spacing: .03em; }
+
+/* ── MINI SYNC SPINNER ───────────────────────── */
+.sync-bar {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 12px; margin-bottom: 10px;
+  font-size: 12px; color: var(--text2);
+  opacity: 0; transition: opacity .3s;
+  pointer-events: none;
+}
+.sync-bar.show { opacity: 1; }
+.mini-spin {
+  width: 12px; height: 12px;
+  border: 2px solid rgba(255,255,255,.15);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+  flex-shrink: 0;
+}
 </style>
 </head>
 <body>
@@ -190,6 +208,7 @@ body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--tex
   </div>
   <div class="section">
     <div class="sec-title">Plan de estudios</div>
+    <div class="sync-bar" id="sync-bar"><div class="mini-spin"></div>Actualizando progreso…</div>
     <div class="grid" id="grid"></div>
     <div class="cert" id="cert" style="display:none">
       <div class="cert-ic">🎓</div>
@@ -417,17 +436,19 @@ window.addEventListener('DOMContentLoaded', () => {
         document.getElementById('home-screen').classList.add('show');
         renderHome();
         // Sincronizar con Sheet en segundo plano
+        const syncBar = document.getElementById('sync-bar');
+        if (syncBar) syncBar.classList.add('show');
         fetch(SCRIPT_URL + '?action=getProgreso&email=' + encodeURIComponent(u.email))
           .then(r => r.json())
           .then(res => {
+            if (syncBar) syncBar.classList.remove('show');
             if (res.ok && res.progreso && Object.keys(res.progreso).length > 0) {
-              // Mergear: Sheet gana sobre localStorage (es la fuente de verdad)
               prog = Object.assign({}, prog, res.progreso);
               localStorage.setItem('edetec_' + u.email, JSON.stringify(prog));
-              renderHome(); // re-renderizar con datos frescos
+              renderHome();
             }
           })
-          .catch(() => {}); // si falla la red, quedamos con localStorage
+          .catch(() => { if (syncBar) syncBar.classList.remove('show'); });
         return;
       }
     } catch(e) {}
