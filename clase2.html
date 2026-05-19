@@ -320,10 +320,10 @@ function registrarEjercicio(ej) {
   yaEnviado[ej.titulo] = true;
   const ejId = ejercicioToId(ej.titulo);
   const programa = lineasOK.map((l,i) => `${i+1}  ${l.text}`).join('\n');
-  const resumen = ej.titulo + '\nPrograma CNC:\n' + programa + '\n\nIntentos: ' + intentos;
+  const resumen = ej.titulo + '\nPrograma CNC:\n' + programa + '\n\nFallos: ' + fallos + ' | Warns: ' + warns;
   const params = new URLSearchParams({
     action:'registrarProgreso', email:SESION.email, nombre:SESION.nombre,
-    ejercicio:ejId, ejTitulo:ej.titulo, estado:'done', resumen
+    ejercicio:ejId, ejTitulo:ej.titulo, claseNombre:'Clase 2', estado:'done', resumen
   });
   fetch(SCRIPT_URL + '?' + params.toString())
     .then(r=>r.json())
@@ -585,6 +585,8 @@ let lineaIdx        = 0;
 let lineasOK        = [];   // [{text, status}]
 let maquina         = {g:null,x:null,z:null,lineNum:0};
 let maquinaHistorial = []; // estado ANTES de cada línea aceptada
+let fallos          = 0;   // líneas con error
+let warns           = 0;   // líneas con warn
 
 // ═══════════════════════════════════════════════
 // PARSER
@@ -813,6 +815,7 @@ function verificarLinea() {
     lineaIdx++;
     document.getElementById('line-input').value = '';
     if (result.ok === 'warn') {
+      warns++;
       showLineFeedback('warn', '⚠ ' + (result.msg || 'Línea aceptada con observación'));
     } else {
       clearLineFeedback();
@@ -825,6 +828,7 @@ function verificarLinea() {
       document.getElementById('line-input').focus();
     }
   } else {
+    fallos++;
     showLineFeedback('err', '✗ Error en la línea. Revisar y reescribir.');
     document.getElementById('line-input').select();
   }
@@ -933,7 +937,10 @@ function resetLineas() {
   lineaIdx  = 0;
   lineasOK  = [];
   maquina   = {g:null, x:null, z:null, lineNum:0};
+  maquinaHistorial = [];
   intentos  = 0;
+  fallos    = 0;
+  warns     = 0;
   const container = document.getElementById('prog-lines');
   if (container) container.innerHTML = '';
   const clw = document.getElementById('current-line-wrap');
