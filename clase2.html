@@ -361,7 +361,7 @@ G0 X100 Z50`,
     checkpoints: () => [
       { label:'Posicionamiento inicial',
         check:(s)=>{ if(s.g===1)return{ok:'warn',msg:'Se recomienda usar G0 en lugar de G1 (G0 es más rápido)'}; if(s.x>48)return{ok:'warn',msg:'Posicionamiento: se recomienda X más cerca del perfil (X ≤ 48)'}; if(s.z>=6)return{ok:'warn',msg:'Posicionamiento: se recomienda Z más cerca de la cara frontal (Z < 6)'}; if(s.z<=0)return{ok:false,msg:'Posicionamiento: Z debe ser positivo'}; return{ok:true}; }},
-      { label:'P2 — Cara frontal X46 Z0', xRequired:46, zRequired:0,
+      { label:'P2 — Cara frontal X46 Z0', xRequired:46, zRequired:0, skipIfX:46,
         check:(s)=>{ if(s.g!==1)return{ok:false,msg:'P2: usar G1 para mecanizado'}; if(s.x!==46)return{ok:false,msg:`P2: X debe ser 46 (programado: ${s.x})`}; if(s.z!==0)return{ok:false,msg:`P2: Z debe ser 0 (programado: ${s.z})`}; return{ok:true}; }},
       { label:'P3 — Cilindro X46 Z-12', xRequired:46, zRequired:-12,
         check:(s)=>{ if(s.g!==1)return{ok:false,msg:'P3: usar G1'}; if(s.x!==46)return{ok:false,msg:`P3: X debe ser 46 (programado: ${s.x})`}; if(s.z!==-12)return{ok:false,msg:`P3: Z debe ser -12 (programado: ${s.z})`}; return{ok:true}; }},
@@ -463,7 +463,7 @@ X100 Z50`,
     checkpoints: () => [
       { label:'Posicionamiento inicial',
         check:(s)=>{ if(s.g===1)return{ok:'warn',msg:'Se recomienda usar G0'}; if(s.x>57)return{ok:'warn',msg:'Posicionamiento: se recomienda X más cerca (X ≤ 57)'}; if(s.z>=6)return{ok:'warn',msg:'Posicionamiento: Z más cerca de la cara frontal (Z < 6)'}; if(s.z<=0)return{ok:false,msg:'Posicionamiento: Z debe ser positivo'}; return{ok:true}; }},
-      { label:'P2 — Cara frontal X55 Z0', xRequired:55, zRequired:0,
+      { label:'P2 — Cara frontal X55 Z0', xRequired:55, zRequired:0, skipIfX:55,
         check:(s)=>{ if(s.g!==1)return{ok:false,msg:'P2: usar G1'}; if(s.x!==55)return{ok:false,msg:`P2: X debe ser 55 (programado: ${s.x})`}; if(s.z!==0)return{ok:false,msg:`P2: Z debe ser 0 (programado: ${s.z})`}; return{ok:true}; }},
       { label:'P3 — Cilindro X55 Z-6', xRequired:55, zRequired:-6,
         check:(s)=>{ if(s.g!==1)return{ok:false,msg:'P3: usar G1'}; if(s.x!==55)return{ok:false,msg:`P3: X debe ser 55 (programado: ${s.x})`}; if(s.z!==-6)return{ok:false,msg:`P3: Z debe ser -6 (programado: ${s.z})`}; return{ok:true}; }},
@@ -481,8 +481,8 @@ X100 Z50`,
         check:(s)=>{ if(s.x<30||s.x>42)return{ok:false,msg:`Retiro X: X debe estar entre 30 y 42 (programado: ${s.x})`}; if(s.changedZ&&s.z>0&&s.g===1)return{ok:'warn',msg:'Retiro/Salida: se recomienda usar G0 para que sea más rápido'}; return{ok:true}; }},
       { label:'Salida Z (Z > 0, G0 recomendado)',
         check:(s,prev,skip)=>{ if(skip)return{ok:true}; if(s.z<=0)return{ok:false,msg:`Salida Z: Z debe ser positivo (programado: ${s.z})`}; if(s.g===1)return{ok:'warn',msg:'Salida Z: se recomienda usar G0'}; return{ok:true}; }},
-      { label:'Alejamiento final (X > retiro, Z ≥ 20)',
-        check:(s,prev)=>{ const px=prev?prev.x:42; if(s.x<=px)return{ok:false,msg:`Alejamiento: X debe ser mayor al X de retiro (${px})`}; if(s.z<20)return{ok:false,msg:`Alejamiento: Z debe ser ≥ 20 (programado: ${s.z})`}; if(s.g===1)return{ok:'warn',msg:'Alejamiento: se recomienda usar G0'}; return{ok:true}; }}
+      { label:'Alejamiento final (Z ≥ 20, X libre)',
+        check:(s)=>{ if(s.z<=0)return{ok:false,msg:`Alejamiento: Z debe ser positivo (programado: ${s.z})`}; if(s.z<20)return{ok:'warn',msg:`Alejamiento: Z debe ser ≥ 20 para mayor seguridad (programado: ${s.z})`}; if(s.g===1)return{ok:'warn',msg:'Alejamiento: se recomienda usar G0'}; return{ok:true}; }}
     ]
   },
   {
@@ -525,8 +525,8 @@ X100 Z50`,
         check:(s)=>{ if(s.x<37||s.x>47)return{ok:false,msg:`Retiro X: X debe estar entre 37 y 47 (programado: ${s.x})`}; if(s.changedZ&&s.z>0&&s.g===1)return{ok:'warn',msg:'Retiro/Salida: se recomienda usar G0 para que sea más rápido'}; return{ok:true}; }},
       { label:'Salida Z (Z > 0, G0 recomendado)',
         check:(s,prev,skip)=>{ if(skip)return{ok:true}; if(s.z<=0)return{ok:false,msg:`Salida Z: Z debe ser positivo (programado: ${s.z})`}; if(s.g===1)return{ok:'warn',msg:'Salida Z: se recomienda usar G0'}; return{ok:true}; }},
-      { label:'Alejamiento final (X > retiro, Z ≥ 20)',
-        check:(s,prev)=>{ const px=prev?prev.x:47; if(s.x<=px)return{ok:false,msg:`Alejamiento: X debe ser mayor al X de retiro (${px})`}; if(s.z<20)return{ok:false,msg:`Alejamiento: Z debe ser ≥ 20 (programado: ${s.z})`}; if(s.g===1)return{ok:'warn',msg:'Alejamiento: se recomienda usar G0'}; return{ok:true}; }}
+      { label:'Alejamiento final (Z ≥ 20, X libre)',
+        check:(s)=>{ if(s.z<=0)return{ok:false,msg:`Alejamiento: Z debe ser positivo (programado: ${s.z})`}; if(s.z<20)return{ok:'warn',msg:`Alejamiento: Z debe ser ≥ 20 para mayor seguridad (programado: ${s.z})`}; if(s.g===1)return{ok:'warn',msg:'Alejamiento: se recomienda usar G0'}; return{ok:true}; }}}}
     ]
   },
   {
@@ -804,7 +804,24 @@ function verificarLinea() {
   }
 
   const cp = checkpoints[lineaIdx];
-  const result = cp.check(estado);
+  let result = cp.check(estado);
+  let skippedCp = false;
+
+  // Skip opcional: si el checkpoint tiene skipIfX y la máquina ya está en ese X,
+  // el alumno puede saltear este punto y programar el siguiente directamente
+  if (result.ok !== true && result.ok !== 'warn' &&
+      cp.skipIfX !== undefined && maquina.x === cp.skipIfX) {
+    const nextCp = checkpoints[lineaIdx + 1];
+    if (nextCp) {
+      const nextResult = nextCp.check(estado);
+      if (nextResult.ok === true || nextResult.ok === 'warn') {
+        // Acepta la línea como el siguiente checkpoint, salteando el actual
+        lineaIdx++;       // skip P2
+        result = nextResult;
+        skippedCp = true;
+      }
+    }
+  }
 
   if (result.ok === true || result.ok === 'warn') {
     // Guardar estado ANTES de aceptar (para poder volver)
