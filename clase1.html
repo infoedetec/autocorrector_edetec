@@ -361,7 +361,7 @@ const EJERCICIOS = [
       P8:  { x:{type:'exact', val:43},                      z:{type:'bore_depth', nominal:-70, tolerance:-2} },
       P9:  { x:{type:'range', min:30, max:42},              z:{type:'bore_depth', nominal:-70, tolerance:-2} },
       P10: { x:{type:'range', min:30, max:42},              z:{type:'gt', val:0} },
-      P11: { x:{type:'gt_prev', prev:'P10'},                z:{type:'min', val:20} }
+      P11: { x:{type:'any'},                                z:{type:'gt_warn', warnBelow:20} }
     },
     solucion: [
       {p:'P1',x:55,z:3},{p:'P2',x:55,z:0},{p:'P3',x:55,z:-6},
@@ -421,7 +421,7 @@ const EJERCICIOS = [
       P9:  { x:{type:'exact', val:48},                     z:{type:'bore_depth', nominal:-70, tolerance:-2} },
       P10: { x:{type:'range', min:37, max:47},             z:{type:'bore_depth', nominal:-70, tolerance:-2} },
       P11: { x:{type:'range', min:37, max:47},             z:{type:'gt', val:0} },
-      P12: { x:{type:'gt_prev', prev:'P11'},               z:{type:'min', val:20} }
+      P12: { x:{type:'any'},                               z:{type:'gt_warn', warnBelow:20} }
     },
     solucion: [
       {p:'P1',x:71,z:3},{p:'P2',x:71,z:0},{p:'P3',x:62,z:-4.5},
@@ -570,6 +570,10 @@ function validateVal(val, regla) {
     case 'min':        return n >= regla.val  ? 'ok' : 'err';
     case 'gt':         return n > regla.val   ? 'ok' : 'err';
     case 'range_warn': return (n>=regla.min && n<=regla.max) ? 'ok' : 'warn';
+    // gt_warn: error si n<=0, warn si 0<n<warnBelow, ok si n>=warnBelow
+    case 'gt_warn':    return n<=0 ? 'err' : (n<regla.warnBelow ? 'warn' : 'ok');
+    // any: siempre ok (sin restricción en ese eje)
+    case 'any':        return 'ok';
     case 'range':
       if (regla.exclusive) {
         if (n > regla.min && n < regla.max) return 'ok';
