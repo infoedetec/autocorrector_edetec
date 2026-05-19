@@ -197,7 +197,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   <div class="modal" style="max-width:420px;text-align:center">
     <div style="font-size:48px;margin-bottom:12px">🚧</div>
     <div style="font-size:20px;font-weight:700;margin-bottom:10px">Clase 3 — Próximamente</div>
-    <p style="font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:20px">Estamos preparando los ejercicios de la Clase 3.<br>¡Muy pronto disponible!</p>
+    <p style="font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:20px">Estamos preparando los ejercicios de la Clase 3. ¡Muy pronto disponible!<br><br>Mientras tanto, enviále tus ejercicios al instructor por <strong>WhatsApp</strong>.</p>
     <button class="btn btn-primary" style="justify-content:center;width:100%" onclick="closeProximamente()">Volver</button>
   </div>
 </div>
@@ -310,7 +310,12 @@ const yaEnviado = {};
 
 function ejercicioToId(titulo) {
   const match = titulo.match(/Ejercicio\s+(\d+)/i);
-  if (match) return 'c2e' + match[1];
+  if (match) {
+    const n = parseInt(match[1]);
+    // Ej5 y Ej6 son los ejercicios de torneado interior → c2ei (coincide con CURSO en index)
+    if (n === 5 || n === 6) return 'c2ei';
+    return 'c2e' + n;
+  }
   if (/adicional/i.test(titulo)) return 'c2eadic';
   return 'c2e_' + titulo.replace(/[^a-z0-9]/gi,'').toLowerCase().slice(0,6);
 }
