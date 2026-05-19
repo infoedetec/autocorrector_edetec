@@ -784,7 +784,8 @@ function goAdicionales() {
 
 function goClase2() {
   document.getElementById('modal-clase-done').classList.remove('open');
-  document.getElementById('modal-proximamente').classList.add('open');
+  if (SESION) localStorage.setItem('edetec_' + SESION.email, JSON.stringify({}));
+  window.location.href = 'clase2.html?start=0';
 }
 
 function closeProximamente() {
@@ -796,7 +797,11 @@ function showFinCurso() {
     <div class="clase-done">
       <div class="clase-done-icon">🏆</div>
       <div class="clase-done-title">¡Clase completada!</div>
-      <div class="clase-done-sub">Completaste todos los ejercicios disponibles.<br>Próximamente se agregarán más.</div>
+      <div class="clase-done-sub">Completaste todos los ejercicios de Clase 1.</div>
+      <div style="display:flex;gap:12px;justify-content:center;margin-top:20px;flex-wrap:wrap">
+        <a href="clase2.html" class="btn btn-next" style="text-decoration:none">→ Seguir con Clase 2</a>
+        <a href="index.html" class="btn btn-reset" style="text-decoration:none">⌂ Ir a HOME</a>
+      </div>
     </div>`;
   document.getElementById('progress-fill').style.width = '100%';
 }
