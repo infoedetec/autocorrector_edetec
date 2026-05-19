@@ -526,7 +526,7 @@ X100 Z50`,
       { label:'Salida Z (Z > 0, G0 recomendado)',
         check:(s,prev,skip)=>{ if(skip)return{ok:true}; if(s.z<=0)return{ok:false,msg:`Salida Z: Z debe ser positivo (programado: ${s.z})`}; if(s.g===1)return{ok:'warn',msg:'Salida Z: se recomienda usar G0'}; return{ok:true}; }},
       { label:'Alejamiento final (Z ≥ 20, X libre)',
-        check:(s)=>{ if(s.z<=0)return{ok:false,msg:`Alejamiento: Z debe ser positivo (programado: ${s.z})`}; if(s.z<20)return{ok:'warn',msg:`Alejamiento: Z debe ser ≥ 20 para mayor seguridad (programado: ${s.z})`}; if(s.g===1)return{ok:'warn',msg:'Alejamiento: se recomienda usar G0'}; return{ok:true}; }}}}
+        check:(s)=>{ if(s.z<=0)return{ok:false,msg:`Alejamiento: Z debe ser positivo (programado: ${s.z})`}; if(s.z<20)return{ok:'warn',msg:`Alejamiento: Z debe ser ≥ 20 para mayor seguridad (programado: ${s.z})`}; if(s.g===1)return{ok:'warn',msg:'Alejamiento: se recomienda usar G0'}; return{ok:true}; }}
     ]
   },
   {
