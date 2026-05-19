@@ -471,7 +471,9 @@ const EJERCICIOS = [
 // ESTADO
 // ═══════════════════════════════════════════════════════════════
 let currentIdx = 0;
-let intentos = 0;
+let intentos = 0;  // interno
+let fallos   = 0;  // veces q verificar tuvo errores
+let warns    = 0;  // warns en resultado final
 let timerInterval = null;
 
 // ═══════════════════════════════════════════════════════════════
@@ -481,6 +483,8 @@ function render() {
   const ej = EJERCICIOS[currentIdx];
   const total = EJERCICIOS.length;
   intentos = 0;
+  fallos = 0;
+  warns = 0;
 
   // Header
   document.getElementById('header-clase').textContent = ej.claseNombre;
@@ -642,6 +646,12 @@ function verificar() {
 
   const allFilled = vacios.length === 0;
   const aprobado  = errores.length === 0 && allFilled;
+
+  // Trackear fallos y warns
+  if (!aprobado && allFilled) fallos++;
+  if (aprobado) {
+    warns = advertencias.length;
+  }
 
   // Registrar aprobación en servidor (solo una vez por ejercicio)
   if (aprobado && SESION && !yaEnviado[ej.titulo]) {
@@ -820,13 +830,14 @@ function registrarEjercicio(ej) {
   const resumen = ej.titulo + '\nTabla de coordenadas:\n' + filas.join('\n');
 
   const params = new URLSearchParams({
-    action:    'registrarProgreso',
-    email:     SESION.email,
-    nombre:    SESION.nombre,
-    ejercicio: ejId,
-    ejTitulo:  ej.titulo,
-    estado:    'done',
-    resumen:   resumen + '\n\nIntentos: ' + intentos
+    action:      'registrarProgreso',
+    email:       SESION.email,
+    nombre:      SESION.nombre,
+    ejercicio:   ejId,
+    ejTitulo:    ej.titulo,
+    claseNombre: 'Clase 1',
+    estado:      'done',
+    resumen:     resumen + '\n\nFallos: ' + fallos + ' | Warns: ' + warns
   });
 
   fetch(SCRIPT_URL + '?' + params.toString())
