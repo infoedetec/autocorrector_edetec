@@ -360,7 +360,7 @@ X60
 G0 X100 Z50`,
     checkpoints: () => [
       { label:'Posicionamiento inicial',
-        check:(s)=>{ if(s.z===null||s.z<=0)return{ok:false,msg:'Posicionamiento: Z debe ser > 0'}; if(s.x===null)return{ok:false,msg:'Posicionamiento: especificá X'}; if(s.g===1)return{ok:'warn',msg:'Se recomienda G0'}; if(s.x>48)return{ok:'warn',msg:'Posicionamiento: se recomienda X más cerca del perfil (X ≤ 48)'}; if(s.z>=6)return{ok:'warn',msg:'Posicionamiento: se recomienda Z más cerca de la cara frontal (Z < 6)'}; return{ok:true}; },
+        check:(s)=>{ if(s.z===null||s.z<=0)return{ok:false,msg:'Posicionamiento: Z debe ser > 0'}; if(s.x===null)return{ok:false,msg:'Posicionamiento: especificá X'}; if(s.g===1)return{ok:'warn',msg:'Se recomienda G0'}; if(s.x>48)return{ok:'warn',msg:'Posicionamiento: se recomienda X más cerca del perfil (X ≤ 48)'}; if(s.z>=6)return{ok:'warn',msg:'Posicionamiento: se recomienda Z más cerca de la cara frontal (Z < 6)'}; return{ok:true}; }},
       { label:'P2 — Cara frontal X46 Z0', xRequired:46, zRequired:0, skipIfX:46,
         check:(s)=>{ if(s.g!==1)return{ok:false,msg:'P2: usar G1 para mecanizado'}; if(s.x!==46)return{ok:false,msg:`P2: X debe ser 46 (programado: ${s.x})`}; if(s.z!==0)return{ok:false,msg:`P2: Z debe ser 0 (programado: ${s.z})`}; return{ok:true}; }},
       { label:'P3 — Cilindro X46 Z-12', xRequired:46, zRequired:-12,
@@ -392,7 +392,7 @@ X72 Z-39
 G0 X150 Z100`,
     checkpoints: () => [
       { label:'Posicionamiento inicial',
-        check:(s)=>{ if(s.z===null||s.z<=0)return{ok:false,msg:'Posicionamiento: Z debe ser > 0'}; if(s.x===null)return{ok:false,msg:'Posicionamiento: especificá X'}; if(s.g===1)return{ok:'warn',msg:'Se recomienda G0'}; if(s.x>59)return{ok:'warn',msg:'Posicionamiento: se recomienda X más cerca (X ≤ 59)'}; if(s.z>=6)return{ok:'warn',msg:'Posicionamiento: Z más cerca de la cara frontal (Z < 6)'}; return{ok:true}; },
+        check:(s)=>{ if(s.z===null||s.z<=0)return{ok:false,msg:'Posicionamiento: Z debe ser > 0'}; if(s.x===null)return{ok:false,msg:'Posicionamiento: especificá X'}; if(s.g===1)return{ok:'warn',msg:'Se recomienda G0'}; if(s.x>59)return{ok:'warn',msg:'Posicionamiento: se recomienda X más cerca (X ≤ 59)'}; if(s.z>=6)return{ok:'warn',msg:'Posicionamiento: Z más cerca de la cara frontal (Z < 6)'}; return{ok:true}; }},
       { label:'P2 — Cara frontal X57 Z0', xRequired:57, zRequired:0,
         check:(s)=>{ if(s.g!==1)return{ok:false,msg:'P2: usar G1'}; if(s.x!==57)return{ok:false,msg:`P2: X debe ser 57 (programado: ${s.x})`}; if(s.z!==0)return{ok:false,msg:`P2: Z debe ser 0 (programado: ${s.z})`}; return{ok:true}; }},
       { label:'P3 — Cono X62 Z-7', xRequired:62, zRequired:-7, diag:true,
@@ -425,7 +425,7 @@ G1 X70
 G0 X150 Z100`,
     checkpoints: () => [
       { label:'Posicionamiento inicial',
-        check:(s)=>{ if(s.z===null||s.z<=0)return{ok:false,msg:'Posicionamiento: Z debe ser > 0'}; if(s.x===null)return{ok:false,msg:'Posicionamiento: especificá X'}; if(s.g===1)return{ok:'warn',msg:'Se recomienda G0'}; if(s.x>48)return{ok:'warn',msg:'Posicionamiento: se recomienda X más cerca (X ≤ 48)'}; if(s.z>=6)return{ok:'warn',msg:'Posicionamiento: Z más cerca de la cara frontal (Z < 6)'}; return{ok:true}; },
+        check:(s)=>{ if(s.z===null||s.z<=0)return{ok:false,msg:'Posicionamiento: Z debe ser > 0'}; if(s.x===null)return{ok:false,msg:'Posicionamiento: especificá X'}; if(s.g===1)return{ok:'warn',msg:'Se recomienda G0'}; if(s.x>48)return{ok:'warn',msg:'Posicionamiento: se recomienda X más cerca (X ≤ 48)'}; if(s.z>=6)return{ok:'warn',msg:'Posicionamiento: Z más cerca de la cara frontal (Z < 6)'}; return{ok:true}; }},
       { label:'P2 — Cara frontal X46 Z0', xRequired:46, zRequired:0,
         check:(s)=>{ if(s.g!==1)return{ok:false,msg:'P2: usar G1'}; if(s.x!==46)return{ok:false,msg:`P2: X debe ser 46 (programado: ${s.x})`}; if(s.z!==0)return{ok:false,msg:`P2: Z debe ser 0 (programado: ${s.z})`}; return{ok:true}; }},
       { label:'Curva R4 — G3 X54 Z-4 R4', xRequired:54, zRequired:-4, noImplicit:true,
@@ -462,7 +462,7 @@ Z3
 X100 Z50`,
     checkpoints: () => [
       { label:'Posicionamiento inicial',
-        check:(s)=>{ if(s.z===null||s.z<=0)return{ok:false,msg:'Posicionamiento: Z debe ser > 0'}; if(s.x===null)return{ok:false,msg:'Posicionamiento: especificá X'}; if(s.g===1)return{ok:'warn',msg:'Se recomienda G0'}; if(s.x>57)return{ok:'warn',msg:'Posicionamiento: se recomienda X más cerca (X ≤ 57)'}; if(s.z>=6)return{ok:'warn',msg:'Posicionamiento: Z más cerca de la cara frontal (Z < 6)'}; return{ok:true}; },
+        check:(s)=>{ if(s.z===null||s.z<=0)return{ok:false,msg:'Posicionamiento: Z debe ser > 0'}; if(s.x===null)return{ok:false,msg:'Posicionamiento: especificá X'}; if(s.g===1)return{ok:'warn',msg:'Se recomienda G0'}; if(s.x>57)return{ok:'warn',msg:'Posicionamiento: se recomienda X más cerca (X ≤ 57)'}; if(s.z>=6)return{ok:'warn',msg:'Posicionamiento: Z más cerca de la cara frontal (Z < 6)'}; return{ok:true}; }},
       { label:'P2 — Cara frontal X55 Z0', xRequired:55, zRequired:0, skipIfX:55,
         check:(s)=>{ if(s.g!==1)return{ok:false,msg:'P2: usar G1'}; if(s.x!==55)return{ok:false,msg:`P2: X debe ser 55 (programado: ${s.x})`}; if(s.z!==0)return{ok:false,msg:`P2: Z debe ser 0 (programado: ${s.z})`}; return{ok:true}; }},
       { label:'P3 — Cilindro X55 Z-6', xRequired:55, zRequired:-6,
@@ -504,7 +504,7 @@ Z3
 X100 Z50`,
     checkpoints: () => [
       { label:'Posicionamiento inicial',
-        check:(s)=>{ if(s.z===null||s.z<=0)return{ok:false,msg:'Posicionamiento: Z debe ser > 0'}; if(s.x===null)return{ok:false,msg:'Posicionamiento: especificá X'}; if(s.g===1)return{ok:'warn',msg:'Se recomienda G0'}; if(s.x>73)return{ok:'warn',msg:'Posicionamiento: se recomienda X más cerca (X ≤ 73)'}; if(s.z>=6)return{ok:'warn',msg:'Posicionamiento: Z más cerca de la cara frontal (Z < 6)'}; return{ok:true}; },
+        check:(s)=>{ if(s.z===null||s.z<=0)return{ok:false,msg:'Posicionamiento: Z debe ser > 0'}; if(s.x===null)return{ok:false,msg:'Posicionamiento: especificá X'}; if(s.g===1)return{ok:'warn',msg:'Se recomienda G0'}; if(s.x>73)return{ok:'warn',msg:'Posicionamiento: se recomienda X más cerca (X ≤ 73)'}; if(s.z>=6)return{ok:'warn',msg:'Posicionamiento: Z más cerca de la cara frontal (Z < 6)'}; return{ok:true}; }},
       { label:'P2 — Cara frontal X71 Z0', xRequired:71, zRequired:0,
         check:(s)=>{ if(s.g!==1)return{ok:false,msg:'P2: usar G1'}; if(s.x!==71)return{ok:false,msg:`P2: X debe ser 71 (programado: ${s.x})`}; if(s.z!==0)return{ok:false,msg:`P2: Z debe ser 0 (programado: ${s.z})`}; return{ok:true}; }},
       { label:'Curva R4.5 — G2 X62 Z-4.5 R4.5', xRequired:62, zRequired:-4.5, noImplicit:true,
@@ -549,7 +549,7 @@ G0 X100 Z100`,
       function approx(a,b,t=0.01){return Math.abs(a-b)<=t;}
       return [
         { label:'Posicionamiento inicial',
-          check:(s)=>{ if(s.z===null||s.z<=0)return{ok:false,msg:'Posicionamiento: Z debe ser > 0'}; if(s.x===null)return{ok:false,msg:'Posicionamiento: especificá X'}; if(s.g===1)return{ok:'warn',msg:'Se recomienda G0'}; if(s.x<5||s.x>9)return{ok:'warn',msg:'Posicionamiento: se recomienda X ≈ 7 (entre 5 y 9)'}; if(s.z>=6)return{ok:'warn',msg:'Posicionamiento: Z más cerca de la cara frontal (Z < 6)'}; return{ok:true}; },
+          check:(s)=>{ if(s.z===null||s.z<=0)return{ok:false,msg:'Posicionamiento: Z debe ser > 0'}; if(s.x===null)return{ok:false,msg:'Posicionamiento: especificá X'}; if(s.g===1)return{ok:'warn',msg:'Se recomienda G0'}; if(s.x<5||s.x>9)return{ok:'warn',msg:'Posicionamiento: se recomienda X ≈ 7 (entre 5 y 9)'}; if(s.z>=6)return{ok:'warn',msg:'Posicionamiento: Z más cerca de la cara frontal (Z < 6)'}; return{ok:true}; }},
         { label:'P2 — Cara frontal X7 Z0', xRequired:7, zRequired:0,
           check:(s)=>{ if(s.g!==1)return{ok:false,msg:'P2: usar G1'}; if(!approx(s.x,7))return{ok:false,msg:`P2: X debe ser 7 (programado: ${s.x})`}; if(s.z!==0)return{ok:false,msg:`P2: Z debe ser 0 (programado: ${s.z})`}; return{ok:true}; }},
         { label:'P3 — Cono 4x45° X15 Z-4', xRequired:15, zRequired:-4, diag:true, noImplicit:true,
