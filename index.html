@@ -356,9 +356,14 @@ function renderHome(){
   document.getElementById('u-name').textContent=user.nombre;
   document.getElementById('u-first').textContent=user.first;
   document.getElementById('u-initial').textContent=user.first.charAt(0);
-  const done=CURSO.reduce((s,c)=>s+c.basicos.filter(e=>prog[e.id]==='done').length,0);
+  // EJ. APROBADOS: todos los ejercicios hechos (básicos + adicionales)
+  const done=CURSO.reduce((s,c)=>
+    s + c.basicos.filter(e=>prog[e.id]==='done').length
+      + c.adicionales.filter(e=>prog[e.id]==='done').length, 0);
   document.getElementById('s-done').textContent=done;
-  document.getElementById('s-pct').textContent=Math.round(done/TOTAL*100)+'%';
+  // % COMPLETADO: clases completas / total clases (sin decimales)
+  const clasesCompletas=CURSO.filter(c=>c.basicos.every(e=>prog[e.id]==='done')).length;
+  document.getElementById('s-pct').textContent=Math.round(clasesCompletas/CURSO.length*100)+'%';
   const curr=CURSO.find(c=>!c.basicos.every(e=>prog[e.id]==='done'));
   document.getElementById('s-cls').textContent=curr?'Clase '+curr.num:'¡Completo!';
   const allDone=!curr;
