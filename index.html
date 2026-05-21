@@ -420,7 +420,10 @@ function goCls(i, mode='next'){
   if (mode === 'repasar') {
     start = 0;
   } else if (mode === 'adicionales') {
-    start = cl.basicos.length; // primer adicional
+    // Primer adicional no completado
+    const firstPendingAdic = cl.adicionales.findIndex(e => prog[e.id] !== 'done');
+    const adicOffset = firstPendingAdic >= 0 ? firstPendingAdic : 0;
+    start = cl.basicos.length + adicOffset;
   } else {
     const nextIdx = cl.basicos.findIndex(e => prog[e.id] !== 'done');
     start = nextIdx >= 0 ? nextIdx : 0;
