@@ -374,7 +374,7 @@ G0 X100 Z50`,
       { label:'P7 — Salida vertical (G1, X≥60, Z-42)',
         check:(s)=>{ if(s.g!==1)return{ok:false,msg:'P7: usar G1 — la herramienta sigue en contacto con la pieza'}; if(s.x<60)return{ok:false,msg:`P7: X debe ser ≥ 60 (programado: ${s.x})`}; if(s.z!==-42)return{ok:false,msg:`P7: Z debe ser -42 (programado: ${s.z})`}; return{ok:true}; }},
       { label:'Alejamiento final (X > P7, Z ≥ 20)',
-        check:(s,prev)=>{ const px=prev?prev.x:60; if(s.x<=px)return{ok:false,msg:`Alejamiento: X debe ser mayor a ${px}`}; if(s.z<20)return{ok:false,msg:`Alejamiento: Z debe ser ≥ 20 (programado: ${s.z})`}; if(s.g===1)return{ok:'warn',msg:'Alejamiento: se recomienda usar G0'}; return{ok:true}; }}
+        check:(s,prev)=>{ const px=prev?prev.x:null; if(s.z===null||s.z<=0)return{ok:false,msg:'Alejamiento: Z debe ser positivo'}; if(s.z<20)return{ok:'warn',msg:`Alejamiento: se recomienda Z ≥ 20 (programado: ${s.z})`}; if(s.x===null||s.x===px)return{ok:'warn',msg:'Alejamiento: se recomienda programar X mayor al diámetro de la materia prima'}; if(px!==null&&s.x<px)return{ok:false,msg:`Alejamiento: X no puede ser menor al diámetro previo (${px})`}; if(s.g===1)return{ok:'warn',msg:'Alejamiento: se recomienda G0'}; return{ok:true}; }}
     ]
   },
   {
@@ -406,7 +406,7 @@ G0 X150 Z100`,
       { label:'P7 — Cono X72 Z-39', xRequired:72, zRequired:-39, diag:true,
         check:(s)=>{ if(s.g!==1)return{ok:false,msg:'P7: usar G1'}; if(s.x!==72)return{ok:false,msg:`P7: X debe ser 72 (programado: ${s.x})`}; if(s.z!==-39)return{ok:false,msg:`P7: Z debe ser -39 (programado: ${s.z})`}; return{ok:true}; }},
       { label:'Alejamiento final (X > 72, Z ≥ 20)',
-        check:(s,prev)=>{ const px=prev?prev.x:72; if(s.x<=px)return{ok:false,msg:`Alejamiento: X debe ser mayor a ${px}`}; if(s.z<20)return{ok:false,msg:`Alejamiento: Z debe ser ≥ 20 (programado: ${s.z})`}; if(s.g===1)return{ok:'warn',msg:'Alejamiento: se recomienda usar G0'}; return{ok:true}; }}
+        check:(s,prev)=>{ const px=prev?prev.x:null; if(s.z===null||s.z<=0)return{ok:false,msg:'Alejamiento: Z debe ser positivo'}; if(s.z<20)return{ok:'warn',msg:`Alejamiento: se recomienda Z ≥ 20 (programado: ${s.z})`}; if(s.x===null||s.x===px)return{ok:'warn',msg:'Alejamiento: se recomienda programar X mayor al diámetro de la materia prima'}; if(px!==null&&s.x<px)return{ok:false,msg:`Alejamiento: X no puede ser menor al diámetro previo (${px})`}; if(s.g===1)return{ok:'warn',msg:'Alejamiento: se recomienda G0'}; return{ok:true}; }}
     ]
   },
   {
@@ -441,7 +441,7 @@ G0 X150 Z100`,
       { label:'Salida vertical (G1, X≥70, Z-28)',
         check:(s)=>{ if(s.g!==1)return{ok:false,msg:'Salida vertical: usar G1 — verificar que el bloque post-arco sea G1'}; if(s.x<70)return{ok:false,msg:`Salida vertical: X debe ser ≥ 70 (programado: ${s.x})`}; if(s.z!==-28)return{ok:false,msg:`Salida vertical: Z debe ser -28 (programado: ${s.z})`}; return{ok:true}; }},
       { label:'Alejamiento final (X > salida, Z ≥ 20)',
-        check:(s,prev)=>{ const px=prev?prev.x:70; if(s.x<=px)return{ok:false,msg:`Alejamiento: X debe ser mayor a ${px}`}; if(s.z<20)return{ok:false,msg:`Alejamiento: Z debe ser ≥ 20 (programado: ${s.z})`}; if(s.g===1)return{ok:'warn',msg:'Alejamiento: se recomienda usar G0'}; return{ok:true}; }}
+        check:(s,prev)=>{ const px=prev?prev.x:null; if(s.z===null||s.z<=0)return{ok:false,msg:'Alejamiento: Z debe ser positivo'}; if(s.z<20)return{ok:'warn',msg:`Alejamiento: se recomienda Z ≥ 20 (programado: ${s.z})`}; if(s.x===null||s.x===px)return{ok:'warn',msg:'Alejamiento: se recomienda programar X mayor al diámetro de la materia prima'}; if(px!==null&&s.x<px)return{ok:false,msg:`Alejamiento: X no puede ser menor al diámetro previo (${px})`}; if(s.g===1)return{ok:'warn',msg:'Alejamiento: se recomienda G0'}; return{ok:true}; }}
     ]
   },
   {
@@ -567,7 +567,7 @@ G0 X100 Z100`,
         { label:'P9 — Arco G2 X80 Z-68 R8', xRequired:80, zRequired:-68, noImplicit:true,
           check:(s)=>{ if(s.g!==2)return{ok:false,msg:'P9: usar G2 con X80 Z-68 R8'}; if(!approx(s.x,80))return{ok:false,msg:`P9: X debe ser 80 (programado: ${s.x})`}; if(!approx(s.z,-68))return{ok:false,msg:`P9: Z debe ser -68 (programado: ${s.z})`}; if(s.r===null)return{ok:false,msg:'P9: falta R8'}; if(!approx(s.r,8))return{ok:false,msg:`P9: R debe ser 8 (programado: ${s.r})`}; return{ok:true}; }},
         { label:'Alejamiento final (X > 80, Z ≥ 20)',
-          check:(s)=>{ if(s.x<=80)return{ok:false,msg:`Alejamiento: X debe ser mayor a 80 (programado: ${s.x})`}; if(s.z<20)return{ok:false,msg:`Alejamiento: Z debe ser ≥ 20 (programado: ${s.z})`}; if(s.g===1)return{ok:'warn',msg:'Alejamiento: se recomienda usar G0'}; return{ok:true}; }}
+          check:(s,prev)=>{ const px=prev?prev.x:80; if(s.z===null||s.z<=0)return{ok:false,msg:'Alejamiento: Z debe ser positivo'}; if(s.z<20)return{ok:'warn',msg:`Alejamiento: se recomienda Z ≥ 20 (programado: ${s.z})`}; if(s.x===null||s.x===px)return{ok:'warn',msg:'Alejamiento: se recomienda programar X mayor al diámetro de la materia prima'}; if(px!==null&&s.x<px)return{ok:false,msg:`Alejamiento: X no puede ser menor al diámetro previo (${px})`}; if(s.g===1)return{ok:'warn',msg:'Alejamiento: se recomienda G0'}; return{ok:true}; }}
       ];
     }
   }
@@ -805,7 +805,7 @@ function verificarLinea() {
   }
 
   const cp = checkpoints[lineaIdx];
-  let result = cp.check(estado);
+  let result = cp.check(estado, maquina);  // maquina = estado previo aceptado
   let skippedCp = false;
 
   // Skip opcional: si el checkpoint tiene skipIfX y la máquina ya está en ese X,
