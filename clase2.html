@@ -1056,10 +1056,15 @@ function showFinCurso(){
   document.getElementById('main-content').innerHTML = `
     <div class="clase-done">
       <div class="clase-done-icon">🏆</div>
-      <div class="clase-done-title">¡Clase 2 Completada!</div>
-      <div class="clase-done-sub">Completaste todos los ejercicios disponibles.<br>Próximamente se agregarán más clases.</div>
+      <div class="clase-done-title">¡Clase 2 completada!</div>
+      <div class="clase-done-sub">Completaste todos los ejercicios de Clase 2.</div>
+      <div style="display:flex;gap:12px;justify-content:center;margin-top:20px;flex-wrap:wrap">
+        <button onclick="document.getElementById('modal-proximamente').classList.add('open')"
+          class="btn btn-next" style="text-decoration:none">→ Seguir con Clase 3</button>
+        <a href="index.html" class="btn btn-reset" style="text-decoration:none">⌂ Ir a HOME</a>
+      </div>
     </div>`;
-  document.getElementById('progress-fill').style.width='100%';
+  document.getElementById('progress-fill').style.width = '100%';
 }
 
 // MODALS
