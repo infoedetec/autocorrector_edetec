@@ -310,13 +310,8 @@ const yaEnviado = {};
 
 function ejercicioToId(titulo) {
   const match = titulo.match(/Ejercicio\s+(\d+)/i);
-  if (match) {
-    const n = parseInt(match[1]);
-    // Ej5 y Ej6 son los ejercicios de torneado interior → c2ei (coincide con CURSO en index)
-    if (n === 5 || n === 6) return 'c2ei';
-    return 'c2e' + n;
-  }
-  if (/adicional/i.test(titulo)) return 'c2eadic';
+  if (match) return 'c2e' + parseInt(match[1]);
+  if (/adicional/i.test(titulo)) return 'c2eadd';
   return 'c2e_' + titulo.replace(/[^a-z0-9]/gi,'').toLowerCase().slice(0,6);
 }
 
